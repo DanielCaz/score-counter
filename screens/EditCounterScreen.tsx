@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Main";
 import { useDispatch, useSelector } from "react-redux";
-import { editCounter, selectCounters } from "../redux/counters/countersSlice";
+import { editCounter, selectCounters } from "../redux/countersSlice";
 import { useMemo, useState } from "react";
 
 type EditCounterScreenProps = NativeStackScreenProps<
@@ -25,18 +25,16 @@ const EditCounterScreen = () => {
   const dispatch = useDispatch();
 
   const [counterName, setCounterName] = useState(counter?.name);
-  const [counterPoints, setCounterPoints] = useState(counter?.points);
 
   const updateCounter = () => {
-    if (!counterName || (!counterPoints && counterPoints !== 0)) {
+    if (!counterName) {
       return;
     }
 
     dispatch(
       editCounter({
-        id: router.params.id,
+        ...counter,
         name: counterName.trim(),
-        points: counterPoints,
       })
     );
 
@@ -50,13 +48,6 @@ const EditCounterScreen = () => {
         style={styles.inputBox}
         onChangeText={setCounterName}
         value={counterName}
-      />
-      <Text style={styles.inputLabel}>Points</Text>
-      <TextInput
-        style={styles.inputBox}
-        onChangeText={(text) => setCounterPoints(parseInt(text))}
-        value={counterPoints?.toString()}
-        keyboardType="numeric"
       />
       <Button title="Save" onPress={updateCounter} />
     </View>

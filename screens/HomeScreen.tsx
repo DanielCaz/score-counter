@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { selectCounters } from "../redux/counters/countersSlice";
+import { selectCounters } from "../redux/countersSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";

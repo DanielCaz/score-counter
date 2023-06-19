@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Counter } from "../../interfaces/counter";
+import { Counter } from "../interfaces/counter";
 
 export const countersSlice = createSlice({
   name: "counters",

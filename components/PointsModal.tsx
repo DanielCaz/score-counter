@@ -2,7 +2,8 @@ import { StyleSheet, Text, View, Modal, TextInput, Button } from "react-native";
 import { Counter } from "../interfaces/counter";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { editCounter } from "../redux/counters/countersSlice";
+import { editCounter } from "../redux/countersSlice";
+import { addCounter } from "../redux/historySlice";
 
 const PointsModal = ({
   counter,
@@ -19,6 +20,7 @@ const PointsModal = ({
 
   const handleSave = () => {
     dispatch(editCounter({ ...counter, points: newPoints + counter.points }));
+    dispatch(addCounter({ ...counter, points: newPoints, id: Date.now() }));
 
     setVisible(false);
   };

@@ -1,15 +1,19 @@
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Menu, MenuItem } from "react-native-material-menu";
-import {
-  createNew,
-  deleteAll,
-  resetAll,
-} from "../redux/counters/countersSlice";
+import { createNew, deleteAll, resetAll } from "../redux/countersSlice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../Main";
+import { useNavigation } from "@react-navigation/native";
+
+type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
+type NoteScreenNavigationProp = HomeScreenProps["navigation"];
 
 const HomeHeader = () => {
+  const navigation = useNavigation<NoteScreenNavigationProp>();
+
   const dispatch = useDispatch();
 
   const [showMenu, setShowMenu] = useState(false);
@@ -33,7 +37,7 @@ const HomeHeader = () => {
         <Ionicons name="ios-add" size={24} color="#cbd5e1" />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => console.log("`Time` button pressed!")}
+        onPress={() => navigation.navigate("History")}
         style={styles.headerItem}
       >
         <Ionicons name="ios-time" size={24} color="#cbd5e1" />
