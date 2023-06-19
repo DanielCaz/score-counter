@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Main";
 import PointsModal from "../components/PointsModal";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
 type NoteScreenNavigationProp = HomeScreenProps["navigation"];
@@ -24,11 +24,20 @@ const HomeScreen = () => {
 
   const [editIndex, setEditIndex] = useState(-1);
 
+  const winner = useMemo(
+    () =>
+      counters.reduce(
+        (prev, curr) => (prev.points > curr.points ? prev : curr),
+        counters[0]
+      ),
+    [counters]
+  );
+
   return (
     <FlatList
       data={counters}
       renderItem={({ item, index }) => (
-        <View style={styles.container}>
+        <View style={{ ...styles.container, backgroundColor: item.color }}>
           <View style={styles.counterHeader}>
             <Text style={styles.counterName}>{item.name}</Text>
             <TouchableOpacity
@@ -57,13 +66,33 @@ const HomeScreen = () => {
           />
         </View>
       )}
+      ListHeaderComponent={
+        winner?.points > 0 ? (
+          <View style={{ padding: 10 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: "#fff", fontSize: 18 }}>Winner</Text>
+              <Ionicons name="ios-trophy" size={24} color="#facc15" />
+            </View>
+            <Text style={{ color: "#fff", fontSize: 16 }}>{winner.name}</Text>
+          </View>
+        ) : null
+      }
+      // This footer is a workaround for a bug in FlatList.
+      // Bug: When you scroll to the bottom of the list and click
+      // on the last item's points and then click on the modal's
+      // input, the modal hides
       ListFooterComponent={() => (
         <View style={{ margin: 10, padding: 10 }}>
-          <View style={styles.counterHeader}>
-            <Text>NA</Text>
-            <Ionicons name="ios-pencil" size={24} />
+          <View>
+            <Text></Text>
           </View>
-          <Text>-1</Text>
+          <Text></Text>
         </View>
       )}
     />
@@ -74,7 +103,6 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#334155",
     alignItems: "center",
     justifyContent: "center",
     margin: 10,

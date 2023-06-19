@@ -10,7 +10,7 @@ const HistoryScreen = () => {
     <FlatList
       data={counters}
       renderItem={({ item }) => (
-        <View style={styles.container}>
+        <View style={{ ...styles.container, backgroundColor: item.color }}>
           <View style={styles.header}>
             <Text style={styles.playerName}>{item.name}</Text>
             <Text style={styles.text}>
@@ -34,7 +34,6 @@ export default HistoryScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1e293b",
     padding: 10,
     gap: 7,
   },

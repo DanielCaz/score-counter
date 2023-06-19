@@ -5,4 +5,5 @@ export interface HistoryItem {
     previous: number;
     current: number;
   };
+  color: string;
 }

@@ -1,5 +1,12 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Main";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +16,8 @@ import {
   selectCounters,
 } from "../redux/countersSlice";
 import { useMemo, useState } from "react";
+import { playerColors } from "../playerColors";
+import { Ionicons } from "@expo/vector-icons";
 
 type EditCounterScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -29,6 +38,7 @@ const EditCounterScreen = () => {
   const dispatch = useDispatch();
 
   const [counterName, setCounterName] = useState(counter?.name);
+  const [counterColor, setCounterColor] = useState(counter?.color);
 
   const handleUpdate = () => {
     if (!counterName) {
@@ -39,6 +49,7 @@ const EditCounterScreen = () => {
       editCounter({
         ...counter,
         name: counterName.trim(),
+        color: counterColor,
       })
     );
 
@@ -58,6 +69,20 @@ const EditCounterScreen = () => {
         onChangeText={setCounterName}
         value={counterName}
       />
+      <Text style={styles.inputLabel}>Color</Text>
+      <View style={styles.colorBar}>
+        {playerColors.map((color) => (
+          <TouchableOpacity
+            key={color}
+            onPress={() => setCounterColor(color)}
+            style={{ ...styles.colorItem, backgroundColor: color }}
+          >
+            {counterColor === color && (
+              <Ionicons name="ios-checkmark" size={24} color="#fff" />
+            )}
+          </TouchableOpacity>
+        ))}
+      </View>
       <View style={styles.buttons}>
         <Button title="Delete" onPress={handleDelete} color="#f43f5e" />
         <Button title="Save" onPress={handleUpdate} color="#0891b2" />
@@ -75,13 +100,25 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: "#ccc",
     fontSize: 16,
+    marginBottom: 5,
+  },
+  colorBar: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  colorItem: {
+    width: 50,
+    height: 50,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
   inputBox: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
-    marginVertical: 10,
     color: "#fff",
   },
   buttons: {

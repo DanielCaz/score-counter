@@ -28,6 +28,7 @@ const PointsModal = ({
           current: counter.points + newPoints,
         },
         id: Date.now(),
+        color: counter.color,
       } as HistoryItem)
     );
 

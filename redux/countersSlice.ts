@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Counter } from "../interfaces/counter";
+import { playerColors } from "../playerColors";
 
 export const countersSlice = createSlice({
   name: "counters",
@@ -8,10 +9,15 @@ export const countersSlice = createSlice({
   },
   reducers: {
     createNew: (state) => {
+      // pick a random color
+      const color =
+        playerColors[Math.floor(Math.random() * playerColors.length)];
+
       state.value.push({
         id: Date.now(),
         name: `Player ${state.value.length + 1}`,
         points: 0,
+        color,
       });
     },
     editCounter: (state, action) => {
