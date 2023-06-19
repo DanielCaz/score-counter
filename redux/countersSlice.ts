@@ -9,10 +9,8 @@ export const countersSlice = createSlice({
   },
   reducers: {
     createNew: (state) => {
-      // pick a random color
       const color =
         playerColors[Math.floor(Math.random() * playerColors.length)];
-
       state.value.push({
         id: Date.now(),
         name: `Player ${state.value.length + 1}`,
