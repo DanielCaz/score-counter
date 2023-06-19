@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Counter } from "../interfaces/counter";
+import { HistoryItem } from "../interfaces/historyItem";
 
 export const historySlice = createSlice({
   name: "history",
   initialState: {
-    value: [] as Counter[],
+    value: [] as HistoryItem[],
   },
   reducers: {
     addCounter: (state, action) => {
-      const { id, name, points } = action.payload as Counter;
-      state.value.push({ id, name, points });
+      const data = action.payload as HistoryItem;
+      state.value.push(data);
     },
-    removeCounters: (state, action) => {
+    removeCounters: (state) => {
       state.value = [];
     },
   },
@@ -19,6 +19,7 @@ export const historySlice = createSlice({
 
 export const { addCounter, removeCounters } = historySlice.actions;
 
-export const selectHistory = (state: any) => state.history.value as Counter[];
+export const selectHistory = (state: any) =>
+  state.history.value as HistoryItem[];
 
 export default historySlice.reducer;

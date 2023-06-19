@@ -57,6 +57,15 @@ const HomeScreen = () => {
           />
         </View>
       )}
+      ListFooterComponent={() => (
+        <View style={{ margin: 10, padding: 10 }}>
+          <View style={styles.counterHeader}>
+            <Text>NA</Text>
+            <Ionicons name="ios-pencil" size={24} />
+          </View>
+          <Text>-1</Text>
+        </View>
+      )}
     />
   );
 };

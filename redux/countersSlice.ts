@@ -15,12 +15,13 @@ export const countersSlice = createSlice({
       });
     },
     editCounter: (state, action) => {
-      const { id, name, points } = action.payload as Counter;
-      const index = state.value.findIndex((counter) => counter.id === id);
-      state.value[index] = { id, name, points };
+      const data = action.payload as Counter;
+      state.value = state.value.map((counter) =>
+        counter.id === data.id ? data : counter
+      );
     },
     deleteCounter: (state, action) => {
-      const { id } = action.payload as Counter;
+      const id = action.payload;
       state.value = state.value.filter((counter) => counter.id !== id);
     },
     resetAll: (state) => {

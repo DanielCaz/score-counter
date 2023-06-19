@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, Modal, TextInput, Button } from "react-native";
+import { StyleSheet, Text, View, Modal, TextInput } from "react-native";
 import { Counter } from "../interfaces/counter";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
 import { editCounter } from "../redux/countersSlice";
 import { addCounter } from "../redux/historySlice";
+import { HistoryItem } from "../interfaces/historyItem";
 
 const PointsModal = ({
   counter,
@@ -16,17 +16,31 @@ const PointsModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const [newPoints, setNewPoints] = useState(0);
-
-  const handleSave = () => {
-    dispatch(editCounter({ ...counter, points: newPoints + counter.points }));
-    dispatch(addCounter({ ...counter, points: newPoints, id: Date.now() }));
+  const handleSave = (newPoints: number) => {
+    dispatch(
+      editCounter({ ...counter, points: newPoints + counter.points } as Counter)
+    );
+    dispatch(
+      addCounter({
+        name: counter.name,
+        points: {
+          previous: counter.points,
+          current: counter.points + newPoints,
+        },
+        id: Date.now(),
+      } as HistoryItem)
+    );
 
     setVisible(false);
   };
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visible}>
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={visible}
+      onRequestClose={() => setVisible(false)}
+    >
       <View style={styles.modalContainer}>
         <View style={styles.modal}>
           <Text style={styles.modalTitle}>
@@ -36,15 +50,11 @@ const PointsModal = ({
             style={styles.inputBox}
             placeholder="Points"
             placeholderTextColor="#ccc"
-            onChangeText={(text) => text.length && setNewPoints(parseInt(text))}
             keyboardType="number-pad"
+            onSubmitEditing={(props) =>
+              handleSave(parseInt(props.nativeEvent.text))
+            }
           />
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
-            <Button title="Cancel" onPress={() => setVisible(false)} />
-            <Button title="Save" onPress={handleSave} />
-          </View>
         </View>
       </View>
     </Modal>
@@ -73,17 +83,13 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  modalHeader: {
+    flexDirection: "row",
+  },
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#fff",
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: 20,
-    alignItems: "center",
-    gap: 30,
   },
   inputLabel: {
     color: "#ccc",

@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Main";
 import { useNavigation } from "@react-navigation/native";
+import { removeCounters } from "../redux/historySlice";
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
 type NoteScreenNavigationProp = HomeScreenProps["navigation"];
@@ -20,11 +21,13 @@ const HomeHeader = () => {
 
   const handleResetAll = () => {
     dispatch(resetAll());
+    dispatch(removeCounters());
     setShowMenu(false);
   };
 
   const handleDeleteAll = () => {
     dispatch(deleteAll());
+    dispatch(removeCounters());
     setShowMenu(false);
   };
 

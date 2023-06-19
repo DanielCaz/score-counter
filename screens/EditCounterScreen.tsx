@@ -3,7 +3,11 @@ import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Main";
 import { useDispatch, useSelector } from "react-redux";
-import { editCounter, selectCounters } from "../redux/countersSlice";
+import {
+  deleteCounter,
+  editCounter,
+  selectCounters,
+} from "../redux/countersSlice";
 import { useMemo, useState } from "react";
 
 type EditCounterScreenProps = NativeStackScreenProps<
@@ -26,7 +30,7 @@ const EditCounterScreen = () => {
 
   const [counterName, setCounterName] = useState(counter?.name);
 
-  const updateCounter = () => {
+  const handleUpdate = () => {
     if (!counterName) {
       return;
     }
@@ -41,6 +45,11 @@ const EditCounterScreen = () => {
     navigation.goBack();
   };
 
+  const handleDelete = () => {
+    dispatch(deleteCounter(counter?.id));
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.inputLabel}>Name</Text>
@@ -49,7 +58,10 @@ const EditCounterScreen = () => {
         onChangeText={setCounterName}
         value={counterName}
       />
-      <Button title="Save" onPress={updateCounter} />
+      <View style={styles.buttons}>
+        <Button title="Delete" onPress={handleDelete} color="#f43f5e" />
+        <Button title="Save" onPress={handleUpdate} color="#0891b2" />
+      </View>
     </View>
   );
 };
@@ -71,6 +83,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     color: "#fff",
-    marginBottom: 20,
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20,
   },
 });
